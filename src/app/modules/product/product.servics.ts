@@ -20,6 +20,31 @@ const updateProductToDB = async (_id:string,updateContent:Product)=>{
     const result = await ProductModel.findByIdAndUpdate({_id},updateContent,{new:true});
     return result 
 }
+// single update products quenty reduce 
+const updateProductReduceToDB = async (_id:string,quantity:number)=>{
+    // console.log(_id,'here')
+    console.log(quantity,'quantity')
+    const result = await ProductModel.findByIdAndUpdate({_id},{
+        $set:{
+            'inventory.quantity':quantity,
+            'inventory.inStock':true,
+        }
+    },{new:true});
+
+    
+    return result 
+}
+// single quentity 0 hole 
+const updateIsZero =async (_id:string,quantity:number)=>{
+    const result = await ProductModel.findByIdAndUpdate({_id},{
+        $set:{
+            'inventory.quantity':quantity,
+            'inventory.inStock':false,
+        }
+    },{new:true});
+    console.log(result,'is zero')
+    return result;
+}
 // delete product 
 const deleteProductToDB = async (_id:string)=>{
     const result = await ProductModel.findByIdAndDelete({_id});
@@ -44,4 +69,6 @@ export const productService ={
      updateProductToDB,
      deleteProductToDB,
      searchProductToDB,
+     updateProductReduceToDB,
+     updateIsZero,
 }

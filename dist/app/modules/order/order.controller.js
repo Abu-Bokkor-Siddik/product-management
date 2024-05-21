@@ -8,13 +8,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderController = void 0;
 const order_servics_1 = require("./order.servics");
+const joi_1 = __importDefault(require("joi"));
 const orderCreate = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const orderSchema = joi_1.default.object({
+            email: joi_1.default.string().email().required(),
+            productId: joi_1.default.string().required(),
+            price: joi_1.default.number().required(),
+            quantity: joi_1.default.number().required()
+        });
         const order = req.body;
+        const { error } = orderSchema.validate(order);
         const result = yield order_servics_1.orderServics.createOrderToDB(order);
+        if (error) {
+            res.status(500).json({
+                success: false,
+                message: 'some thing is wrong',
+                error: error.details,
+            });
+        }
         res.status(200).json({
             success: true,
             message: 'Order created successfully!',
@@ -22,7 +40,10 @@ const orderCreate = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
     catch (error) {
-        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'some thing is wrong',
+        });
     }
 });
 // all order controller

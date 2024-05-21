@@ -15,7 +15,8 @@ const VariantsSchema = new mongoose_1.Schema({
 const productSchema = new mongoose_1.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     description: {
         type: String,
