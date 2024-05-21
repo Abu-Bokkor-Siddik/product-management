@@ -84,7 +84,7 @@ const searchProductController = async(req:Request,res:Response)=>{
   try {
        const searchTerm:string= req.query.searchTerm as string;
        const searchRegex = new RegExp(searchTerm,"i")
-       console.log(searchTerm)
+      //  console.log(searchTerm)
       //  console.log(typeof(searchRegex))
       const result = await productService.searchProductToDB(searchTerm,searchRegex);
       // console.log(result)

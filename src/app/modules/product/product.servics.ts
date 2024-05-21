@@ -26,7 +26,7 @@ const deleteProductToDB = async (_id:string)=>{
     return result 
 }
 // search products
-const searchProductToDB = async (searchTerm,searchRegex:object)=>{
+const searchProductToDB = async (searchTerm:string,searchRegex:object)=>{
     
     const result = await ProductModel.find({
         $or:[
