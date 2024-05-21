@@ -5,7 +5,8 @@ import { Order } from './order.interface';
  const orderSchema = new Schema<Order>({
     email:{
         type:String,
-        required:true
+        required:true,
+        unique:true
     },
     productId:{
         type:String,

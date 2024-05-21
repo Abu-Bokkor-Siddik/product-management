@@ -32,11 +32,20 @@ const allOrderController = (req, res) => __awaiter(void 0, void 0, void 0, funct
         if ((_a = req.query) === null || _a === void 0 ? void 0 : _a.email) {
             const email = (_b = req.query) === null || _b === void 0 ? void 0 : _b.email;
             const result = yield order_servics_1.orderServics.emailOrderToDB(email);
-            res.status(200).json({
-                success: true,
-                message: 'email fetched successfully!',
-                data: result,
-            });
+            // console.log(result)
+            if (result.length == 0) {
+                res.status(400).json({
+                    success: false,
+                    message: 'Order not found',
+                });
+            }
+            else {
+                res.status(200).json({
+                    success: true,
+                    message: 'email fetched successfully!',
+                    data: result,
+                });
+            }
         }
         if (!((_c = req.query) === null || _c === void 0 ? void 0 : _c.email)) {
             const result = yield order_servics_1.orderServics.allOrderToDB();
@@ -51,20 +60,6 @@ const allOrderController = (req, res) => __awaiter(void 0, void 0, void 0, funct
         console.log(error);
     }
 });
-// email get all order 
-// const emailOrderController = async (req: Request, res: Response) => {
-//   try {
-// const email:string = req.query?.email as string;
-// const result = await orderServics.emailOrderToDB(email)
-// res.status(200).json({
-//   success: true,
-//   message: 'email fetched successfully!',
-//   data: result,
-// })
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
 exports.OrderController = {
     orderCreate,
     allOrderController,

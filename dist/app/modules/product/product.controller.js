@@ -43,7 +43,7 @@ const allProductController = (req, res) => __awaiter(void 0, void 0, void 0, fun
 const singleProductController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { productId } = req.params;
-        console.log(productId);
+        //  console.log(productId)
         const result = yield product_servics_1.productService.singleProductToDB(productId);
         res.status(200).json({
             success: true,
@@ -97,7 +97,7 @@ const searchProductController = (req, res) => __awaiter(void 0, void 0, void 0, 
     try {
         const searchTerm = req.query.searchTerm;
         const searchRegex = new RegExp(searchTerm, "i");
-        console.log(searchTerm);
+        //  console.log(searchTerm)
         //  console.log(typeof(searchRegex))
         const result = yield product_servics_1.productService.searchProductToDB(searchTerm, searchRegex);
         // console.log(result)
