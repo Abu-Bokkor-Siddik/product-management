@@ -9,5 +9,6 @@ const order_controller_1 = require("./order.controller");
 const route = express_1.default.Router();
 // create order 
 route.post('/orders', order_controller_1.OrderController.orderCreate);
+// get all order and find by email
 route.get('/orders', order_controller_1.OrderController.allOrderController);
 exports.orderRoute = route;

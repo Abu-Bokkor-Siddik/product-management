@@ -13,10 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./app"));
-// const mongoose = require("mongoose");
 const mongoose_1 = __importDefault(require("mongoose"));
 // 
-// console.log(config.port);
+// console.log(config.port,'port is define');
 // console.log(process.env.PORT)
 // console.log(process.env.DATABASE_URL)
 function main() {

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { orderServics } from './order.servics'
-import joi, { number } from 'joi'
+import joi from 'joi'
 import { productService } from '../product/product.servics'
 const orderCreate = async (req: Request, res: Response) => {
   try {
@@ -19,7 +19,7 @@ const orderCreate = async (req: Request, res: Response) => {
       order?.productId,
     )
     const numberReduce: number = (findProductData?.inventory?.quantity ?? 0) - (order?.quantity) 
-    console.log(numberReduce)
+    // console.log(numberReduce)
     if (numberReduce < 0) {
       res.status(500).json({
         success: false,
@@ -52,7 +52,7 @@ const orderCreate = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: 'Order created successfully!',
-      data: result,
+      data: results,
     })
 
 
@@ -82,7 +82,7 @@ const allOrderController = async (req: Request, res: Response) => {
       } else {
         res.status(200).json({
           success: true,
-          message: 'email fetched successfully!',
+          message: 'Orders fetched successfully for user email!',
           data: result,
         })
       }
@@ -96,7 +96,10 @@ const allOrderController = async (req: Request, res: Response) => {
       })
     }
   } catch (error) {
-    console.log(error)
+    res.status(500).json({
+      success: false,
+      message: 'something is wrong',
+    })
   }
 }
 

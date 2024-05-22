@@ -36,7 +36,8 @@ const productSchema = new mongoose_1.Schema({
     },
     variants: {
         type: [VariantsSchema],
-        required: true
+        required: true,
+        _id: false
     },
     inventory: {
         quantity: {

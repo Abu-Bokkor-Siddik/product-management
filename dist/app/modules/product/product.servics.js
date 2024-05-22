@@ -15,22 +15,46 @@ const createProductToDB = (product) => __awaiter(void 0, void 0, void 0, functio
     const result = yield product_model_1.ProductModel.create(product);
     return result;
 });
-// all products 
+// all products
 const allProductToDB = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield product_model_1.ProductModel.find();
     return result;
 });
-// single products 
+// single products
 const singleProductToDB = (_id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield product_model_1.ProductModel.findOne({ _id });
     return result;
 });
-// single update products 
+// single update products
 const updateProductToDB = (_id, updateContent) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield product_model_1.ProductModel.findByIdAndUpdate({ _id }, updateContent, { new: true });
+    const result = yield product_model_1.ProductModel.findByIdAndUpdate({ _id }, updateContent, {
+        new: true,
+    });
     return result;
 });
-// delete product 
+// single update products quenty reduce
+const updateProductReduceToDB = (_id, quantity) => __awaiter(void 0, void 0, void 0, function* () {
+    // console.log(_id,'here')
+    // console.log(quantity,'quantity')
+    const result = yield product_model_1.ProductModel.findByIdAndUpdate({ _id }, {
+        $set: {
+            'inventory.quantity': quantity,
+            'inventory.inStock': true,
+        },
+    }, { new: true });
+    return result;
+});
+// single quentity 0 hole
+const updateIsZero = (_id, quantity) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield product_model_1.ProductModel.findByIdAndUpdate({ _id }, {
+        $set: {
+            'inventory.quantity': quantity,
+            'inventory.inStock': false,
+        },
+    }, { new: true });
+    return result;
+});
+// delete product
 const deleteProductToDB = (_id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield product_model_1.ProductModel.findByIdAndDelete({ _id });
     return result;
@@ -41,8 +65,8 @@ const searchProductToDB = (searchTerm, searchRegex) => __awaiter(void 0, void 0,
         $or: [
             { name: searchRegex },
             { description: searchRegex },
-            { category: searchRegex }
-        ]
+            { category: searchRegex },
+        ],
     });
     return result;
 });
@@ -53,4 +77,6 @@ exports.productService = {
     updateProductToDB,
     deleteProductToDB,
     searchProductToDB,
+    updateProductReduceToDB,
+    updateIsZero,
 };

@@ -35,7 +35,8 @@ required:true
 },
 variants:{
     type:[VariantsSchema],
-    required:true
+    required:true,
+    _id:false
 },
 inventory:{
     quantity:{

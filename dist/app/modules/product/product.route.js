@@ -19,4 +19,5 @@ router.get('/products/:productId', product_controller_1.productController.single
 router.put('/products/:productId', product_controller_1.productController.updateProductController);
 // delete products 
 router.delete('/products/:productId', product_controller_1.productController.deleteProductController);
+// 
 exports.productRoute = router;

@@ -25,6 +25,7 @@ const emailOrderToDB = (email) => __awaiter(void 0, void 0, void 0, function* ()
     const result = yield order_model_1.orderModel.find({ email });
     return result;
 });
+// 
 exports.orderServics = {
     createOrderToDB,
     allOrderToDB,

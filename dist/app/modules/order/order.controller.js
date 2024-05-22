@@ -15,8 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderController = void 0;
 const order_servics_1 = require("./order.servics");
 const joi_1 = __importDefault(require("joi"));
+const product_servics_1 = require("../product/product.servics");
 const orderCreate = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d;
     try {
+        // joi schema create here
         const orderSchema = joi_1.default.object({
             email: joi_1.default.string().email().required(),
             productId: joi_1.default.string().required(),
@@ -24,20 +27,43 @@ const orderCreate = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             quantity: joi_1.default.number().required()
         });
         const order = req.body;
-        const { error } = orderSchema.validate(order);
-        const result = yield order_servics_1.orderServics.createOrderToDB(order);
-        if (error) {
+        // console.log(order?.productId)
+        // first i find data products document
+        const findProductData = yield product_servics_1.productService.singleProductToDB(order === null || order === void 0 ? void 0 : order.productId);
+        const numberReduce = ((_b = (_a = findProductData === null || findProductData === void 0 ? void 0 : findProductData.inventory) === null || _a === void 0 ? void 0 : _a.quantity) !== null && _b !== void 0 ? _b : 0) - (order === null || order === void 0 ? void 0 : order.quantity);
+        // console.log(numberReduce)
+        if (numberReduce < 0) {
             res.status(500).json({
                 success: false,
-                message: 'some thing is wrong',
-                error: error.details,
+                message: 'Insufficient quantity available in inventory',
             });
         }
-        res.status(200).json({
-            success: true,
-            message: 'Order created successfully!',
-            data: result,
-        });
+        if (numberReduce == 0) {
+            const findValueIsZero = yield product_servics_1.productService.updateIsZero(order === null || order === void 0 ? void 0 : order.productId, numberReduce);
+            res.status(200).json({
+                success: true,
+                message: 'stock update successfully!',
+            });
+        }
+        // update here 
+        if (numberReduce > 0) {
+            const reduce = ((_d = (_c = findProductData === null || findProductData === void 0 ? void 0 : findProductData.inventory) === null || _c === void 0 ? void 0 : _c.quantity) !== null && _d !== void 0 ? _d : 0) - (order === null || order === void 0 ? void 0 : order.quantity);
+            const result = yield product_servics_1.productService.updateProductReduceToDB(order === null || order === void 0 ? void 0 : order.productId, reduce);
+            const { error } = orderSchema.validate(order);
+            const results = yield order_servics_1.orderServics.createOrderToDB(order);
+            if (error) {
+                res.status(500).json({
+                    success: false,
+                    message: 'some thing is wrong',
+                    error: error.details,
+                });
+            }
+            res.status(200).json({
+                success: true,
+                message: 'Order created successfully!',
+                data: results,
+            });
+        } //if ar 
     }
     catch (error) {
         res.status(500).json({
@@ -48,10 +74,10 @@ const orderCreate = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 // all order controller
 const allOrderController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c;
+    var _e, _f, _g;
     try {
-        if ((_a = req.query) === null || _a === void 0 ? void 0 : _a.email) {
-            const email = (_b = req.query) === null || _b === void 0 ? void 0 : _b.email;
+        if ((_e = req.query) === null || _e === void 0 ? void 0 : _e.email) {
+            const email = (_f = req.query) === null || _f === void 0 ? void 0 : _f.email;
             const result = yield order_servics_1.orderServics.emailOrderToDB(email);
             // console.log(result)
             if (result.length == 0) {
@@ -63,12 +89,12 @@ const allOrderController = (req, res) => __awaiter(void 0, void 0, void 0, funct
             else {
                 res.status(200).json({
                     success: true,
-                    message: 'email fetched successfully!',
+                    message: 'Orders fetched successfully for user email!',
                     data: result,
                 });
             }
         }
-        if (!((_c = req.query) === null || _c === void 0 ? void 0 : _c.email)) {
+        if (!((_g = req.query) === null || _g === void 0 ? void 0 : _g.email)) {
             const result = yield order_servics_1.orderServics.allOrderToDB();
             res.status(200).json({
                 success: true,
@@ -78,7 +104,10 @@ const allOrderController = (req, res) => __awaiter(void 0, void 0, void 0, funct
         }
     }
     catch (error) {
-        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'something is wrong',
+        });
     }
 });
 exports.OrderController = {

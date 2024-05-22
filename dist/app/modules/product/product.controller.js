@@ -17,26 +17,29 @@ const product_servics_1 = require("./product.servics");
 const joi_1 = __importDefault(require("joi"));
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // create a schema for joi 
+        // create a schema for joi
         const joiSchema = joi_1.default.object({
             name: joi_1.default.string().required(),
             description: joi_1.default.string().required(),
             price: joi_1.default.number().required(),
             category: joi_1.default.string().required(),
             tags: joi_1.default.array().items(joi_1.default.string()).required(),
-            variants: joi_1.default.array().items(joi_1.default.object({
+            variants: joi_1.default
+                .array()
+                .items(joi_1.default.object({
                 type: joi_1.default.string(),
-                value: joi_1.default.string()
-            })).required(),
-            inventory: joi_1.default.object({
+                value: joi_1.default.string(),
+            }))
+                .required(),
+            inventory: joi_1.default
+                .object({
                 quantity: joi_1.default.number(),
-                inStock: joi_1.default.boolean()
-            }).required()
+                inStock: joi_1.default.boolean(),
+            })
+                .required(),
         });
         const product = req.body;
         const { error } = joiSchema.validate(product);
-        // console.log(error)
-        // console.log(value)
         const result = yield product_servics_1.productService.createProductToDB(product);
         if (error) {
             res.status(500).json({
@@ -54,11 +57,11 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     catch (error) {
         res.status(500).json({
             success: false,
-            message: 'some thing is wrong on data',
+            message: 'something is wrong on data check please',
         });
     }
 });
-// all products controller 
+// all products controller
 const allProductController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield product_servics_1.productService.allProductToDB();
@@ -69,10 +72,13 @@ const allProductController = (req, res) => __awaiter(void 0, void 0, void 0, fun
         });
     }
     catch (error) {
-        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'data not found',
+        });
     }
 });
-// single product 
+// single product
 const singleProductController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { productId } = req.params;
@@ -85,7 +91,10 @@ const singleProductController = (req, res) => __awaiter(void 0, void 0, void 0, 
         });
     }
     catch (error) {
-        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: ' single data not found ',
+        });
     }
 });
 // update product
@@ -93,10 +102,8 @@ const updateProductController = (req, res) => __awaiter(void 0, void 0, void 0, 
     try {
         const { productId } = req.params;
         const updateContent = req.body;
-        //  console.log(productId)
-        //  console.log(updateContent)
+        console.log(productId, updateContent);
         const result = yield product_servics_1.productService.updateProductToDB(productId, updateContent);
-        // console.log(result)
         res.status(200).json({
             success: true,
             message: 'Products update successfully!',
@@ -104,17 +111,17 @@ const updateProductController = (req, res) => __awaiter(void 0, void 0, void 0, 
         });
     }
     catch (error) {
-        console.log(error);
+        res.status(500).json({
+            success: false,
+            error
+        });
     }
 });
-// delete products 
+// delete products
 const deleteProductController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { productId } = req.params;
-        //  console.log(productId)
-        //  console.log(updateContent)
         const result = yield product_servics_1.productService.deleteProductToDB(productId);
-        // console.log(result)
         res.status(200).json({
             success: true,
             message: 'product delete successfully!',
@@ -122,26 +129,37 @@ const deleteProductController = (req, res) => __awaiter(void 0, void 0, void 0, 
         });
     }
     catch (error) {
-        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'something is wrong on delete data check please',
+        });
     }
 });
-// search products 
+// search products
 const searchProductController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const searchTerm = req.query.searchTerm;
-        const searchRegex = new RegExp(searchTerm, "i");
-        //  console.log(searchTerm)
-        //  console.log(typeof(searchRegex))
+        const searchRegex = new RegExp(searchTerm, 'i');
         const result = yield product_servics_1.productService.searchProductToDB(searchTerm, searchRegex);
-        // console.log(result)
-        res.status(200).json({
-            success: true,
-            message: `Products matching search term ${searchTerm}fetched successfully!`,
-            data: result,
-        });
+        if (result.length > 0) {
+            res.status(200).json({
+                success: true,
+                message: `Products matching search term ${searchTerm}fetched successfully!`,
+                data: result,
+            });
+        }
+        else {
+            res.status(500).json({
+                success: false,
+                message: 'not a valid field',
+            });
+        }
     }
     catch (error) {
-        console.log(error);
+        res.status(500).json({
+            success: false,
+            error,
+        });
     }
 });
 exports.productController = {

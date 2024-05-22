@@ -1,10 +1,9 @@
 import app from "./app";
 import config from "./app/config";
-// const mongoose = require("mongoose");
 import mongoose from "mongoose";
 // 
 
-// console.log(config.port);
+// console.log(config.port,'port is define');
 // console.log(process.env.PORT)
 // console.log(process.env.DATABASE_URL)
 async function main() {
