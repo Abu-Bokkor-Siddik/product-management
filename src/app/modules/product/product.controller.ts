@@ -47,10 +47,9 @@ const createProduct = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-     
+
       message: 'something is wrong on data check please',
     })
-   
   }
 }
 // all products controller
@@ -92,7 +91,6 @@ const updateProductController = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params
     const updateContent = req.body
-    console.log(productId,updateContent)
     const result = await productService.updateProductToDB(
       productId,
       updateContent,
@@ -106,7 +104,7 @@ const updateProductController = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      error
+      error,
     })
   }
 }
@@ -115,7 +113,7 @@ const deleteProductController = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params
 
-      await productService.deleteProductToDB(productId)
+    await productService.deleteProductToDB(productId)
 
     res.status(200).json({
       success: true,
@@ -140,14 +138,13 @@ const searchProductController = async (req: Request, res: Response) => {
       searchRegex,
     )
 
-    if (result.length>0) {
+    if (result.length > 0) {
       res.status(200).json({
         success: true,
         message: `Products matching search term ${searchTerm}fetched successfully!`,
         data: result,
       })
-      
-    }else{
+    } else {
       res.status(500).json({
         success: false,
         message: 'not a valid field',

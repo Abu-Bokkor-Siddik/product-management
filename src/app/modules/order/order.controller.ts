@@ -7,18 +7,19 @@ const orderCreate = async (req: Request, res: Response) => {
     // joi schema create here
 
     const orderSchema = joi.object({
-      email:joi.string().email().required(),
-      productId:joi.string().required(),
-      price:joi.number().required(),
-      quantity:joi.number().required()
+      email: joi.string().email().required(),
+      productId: joi.string().required(),
+      price: joi.number().required(),
+      quantity: joi.number().required(),
     })
     const order = req.body
-    // console.log(order?.productId)
+
     // first i find data products document
     const findProductData = await productService.singleProductToDB(
       order?.productId,
     )
-    const numberReduce: number = (findProductData?.inventory?.quantity ?? 0) - (order?.quantity) 
+    const numberReduce: number =
+      (findProductData?.inventory?.quantity ?? 0) - order?.quantity
     // console.log(numberReduce)
     if (numberReduce < 0) {
       res.status(500).json({
@@ -26,40 +27,35 @@ const orderCreate = async (req: Request, res: Response) => {
         message: 'Insufficient quantity available in inventory',
       })
     }
-    if (numberReduce==0) {
-       await productService.updateIsZero(order?.productId,numberReduce)
+    if (numberReduce == 0) {
+      await productService.updateIsZero(order?.productId, numberReduce)
       res.status(200).json({
         success: true,
         message: 'stock update successfully!',
-        
       })
     }
-    // update here 
+    // update here
     if (numberReduce > 0) {
-      const reduce:number =(findProductData?.inventory?.quantity ?? 0) - (order?.quantity)
-       await productService.updateProductReduceToDB(order?.productId,reduce);
+      const reduce: number =
+        (findProductData?.inventory?.quantity ?? 0) - order?.quantity
+      await productService.updateProductReduceToDB(order?.productId, reduce)
 
-      const {error}= orderSchema.validate(order)
-    const results = await orderServics.createOrderToDB(order)
-    if (error) {
-    res.status(500).json({
-      success: false,
-      message: 'some thing is wrong',
-      error:error.details,
-    })
-    }
+      const { error } = orderSchema.validate(order)
+      const results = await orderServics.createOrderToDB(order)
+      if (error) {
+        res.status(500).json({
+          success: false,
+          message: 'some thing is wrong',
+          error: error.details,
+        })
+      }
 
-    res.status(200).json({
-      success: true,
-      message: 'Order created successfully!',
-      data: results,
-    })
-
-
-    } //if ar 
-   
-    
-    
+      res.status(200).json({
+        success: true,
+        message: 'Order created successfully!',
+        data: results,
+      })
+    } //if ar
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -106,5 +102,5 @@ const allOrderController = async (req: Request, res: Response) => {
 export const OrderController = {
   orderCreate,
   allOrderController,
-  // emailOrderController,
+ 
 }
