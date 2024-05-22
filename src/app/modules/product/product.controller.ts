@@ -72,7 +72,6 @@ const allProductController = async (req: Request, res: Response) => {
 const singleProductController = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params
-    //  console.log(productId)
     const result = await productService.singleProductToDB(productId)
     res.status(200).json({
       success: true,
