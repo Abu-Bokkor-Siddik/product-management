@@ -27,7 +27,7 @@ const orderCreate = async (req: Request, res: Response) => {
       })
     }
     if (numberReduce==0) {
-      const findValueIsZero = await productService.updateIsZero(order?.productId,numberReduce)
+       await productService.updateIsZero(order?.productId,numberReduce)
       res.status(200).json({
         success: true,
         message: 'stock update successfully!',
@@ -37,7 +37,7 @@ const orderCreate = async (req: Request, res: Response) => {
     // update here 
     if (numberReduce > 0) {
       const reduce:number =(findProductData?.inventory?.quantity ?? 0) - (order?.quantity)
-      const result = await productService.updateProductReduceToDB(order?.productId,reduce);
+       await productService.updateProductReduceToDB(order?.productId,reduce);
 
       const {error}= orderSchema.validate(order)
     const results = await orderServics.createOrderToDB(order)

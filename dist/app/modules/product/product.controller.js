@@ -121,7 +121,7 @@ const updateProductController = (req, res) => __awaiter(void 0, void 0, void 0, 
 const deleteProductController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { productId } = req.params;
-        const result = yield product_servics_1.productService.deleteProductToDB(productId);
+        yield product_servics_1.productService.deleteProductToDB(productId);
         res.status(200).json({
             success: true,
             message: 'product delete successfully!',

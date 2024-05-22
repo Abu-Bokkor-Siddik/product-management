@@ -47,8 +47,10 @@ const createProduct = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({
       success: false,
+     
       message: 'something is wrong on data check please',
     })
+   
   }
 }
 // all products controller
@@ -113,7 +115,7 @@ const deleteProductController = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params
 
-    const result = await productService.deleteProductToDB(productId)
+      await productService.deleteProductToDB(productId)
 
     res.status(200).json({
       success: true,

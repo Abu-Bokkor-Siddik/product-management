@@ -14,14 +14,14 @@ app.use((0, cors_1.default)());
 app.use('/api', product_route_1.productRoute);
 //  all order here
 app.use('/api', order_route_1.orderRoute);
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
 // all route error handler
 app.all('*', (req, res) => {
     res.status(400).json({
         success: false,
         message: 'Route not found',
     });
-});
-app.get('/', (req, res) => {
-    res.send('Hello World!');
 });
 exports.default = app;

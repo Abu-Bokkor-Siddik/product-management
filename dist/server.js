@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./app"));
+// import config from "./app/config";
 const mongoose_1 = __importDefault(require("mongoose"));
 // 
 // console.log(config.port,'port is define');

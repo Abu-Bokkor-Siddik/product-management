@@ -9,6 +9,10 @@ app.use(cors())
 app.use('/api', productRoute)
 //  all order here
 app.use('/api', orderRoute)
+
+app.get('/', (req: Request, res: Response) => {
+  res.send('Hello World!')
+})
 // all route error handler
 app.all('*', (req: Request, res: Response) => {
   res.status(400).json({
@@ -16,8 +20,4 @@ app.all('*', (req: Request, res: Response) => {
     message: 'Route not found',
   })
 })
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!')
-})
-
 export default app

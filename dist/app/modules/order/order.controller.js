@@ -39,7 +39,7 @@ const orderCreate = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             });
         }
         if (numberReduce == 0) {
-            const findValueIsZero = yield product_servics_1.productService.updateIsZero(order === null || order === void 0 ? void 0 : order.productId, numberReduce);
+            yield product_servics_1.productService.updateIsZero(order === null || order === void 0 ? void 0 : order.productId, numberReduce);
             res.status(200).json({
                 success: true,
                 message: 'stock update successfully!',
@@ -48,7 +48,7 @@ const orderCreate = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         // update here 
         if (numberReduce > 0) {
             const reduce = ((_d = (_c = findProductData === null || findProductData === void 0 ? void 0 : findProductData.inventory) === null || _c === void 0 ? void 0 : _c.quantity) !== null && _d !== void 0 ? _d : 0) - (order === null || order === void 0 ? void 0 : order.quantity);
-            const result = yield product_servics_1.productService.updateProductReduceToDB(order === null || order === void 0 ? void 0 : order.productId, reduce);
+            yield product_servics_1.productService.updateProductReduceToDB(order === null || order === void 0 ? void 0 : order.productId, reduce);
             const { error } = orderSchema.validate(order);
             const results = yield order_servics_1.orderServics.createOrderToDB(order);
             if (error) {
